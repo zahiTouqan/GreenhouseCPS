@@ -16,10 +16,12 @@ def main():
             #print('DHT{0}, humidity {1:.1f}%, temperature {2:.1f}*'.format(sensor.dht_type, humi, temp))
         #else:
             #print('DHT{0}, humidity & temperature: {1}'.format(sensor.dht_type, temp))
+    '''
     if 16 <= temp <= 26:
         GPIO.output(16,GPIO.LOW)
     else:
         GPIO.output(16,GPIO.HIGH)
+        '''
     return humi,temp
     #time.sleep(1)
 

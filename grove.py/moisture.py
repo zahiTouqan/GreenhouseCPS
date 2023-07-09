@@ -98,6 +98,7 @@ def test():
     GPIO.setup(16,GPIO.OUT)
     sensor = GroveMoistureSensor(pin)
     m = sensor.moisture
+    '''
     if 0 <= m and m < 300:
 		#result = 'Dry'
         GPIO.output(16,GPIO.HIGH)
@@ -107,6 +108,7 @@ def test():
     else:
 		#result = 'Wet'
         GPIO.output(16,GPIO.HIGH)
+        '''
     return m
 
     
