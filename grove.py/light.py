@@ -57,16 +57,18 @@ Grove = GroveLightSensor
 
 
 def main():
-    from grove.helper import SlotHelper
-    sh = SlotHelper(SlotHelper.ADC)
-    pin = sh.argv2pin()
+    #from grove.helper import SlotHelper
+    #sh = SlotHelper(SlotHelper.ADC)
+    #pin = sh.argv2pin()
+    pin = 4
 
     sensor = GroveLightSensor(pin)
 
-    print('Detecting light...')
-    while True:
-        print('Light value: {0}'.format(sensor.light))
-        time.sleep(1)
+    #print('Detecting light...')
+    #while True:
+    #print('Light value: {0}'.format(sensor.light))
+    return sensor.light
+    #time.sleep(1)
 
 if __name__ == '__main__':
     main()

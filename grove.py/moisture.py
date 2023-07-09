@@ -87,9 +87,28 @@ def main():
             GPIO.output(16,GPIO.LOW)
         else:
             result = 'Wet'
-            GPIO.output(16,GPIO.LOW)
+            GPIO.output(16,GPIO.HIGH)
         print('Moisture value: {0}, {1}'.format(m, result))
         time.sleep(1)
 
+def test():
+    pin = 0
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setwarnings(False)
+    GPIO.setup(16,GPIO.OUT)
+    sensor = GroveMoistureSensor(pin)
+    m = sensor.moisture
+    if 0 <= m and m < 300:
+		#result = 'Dry'
+        GPIO.output(16,GPIO.HIGH)
+    elif 300 <= m and m < 600:
+		#result = 'Moist'
+        GPIO.output(16,GPIO.LOW)
+    else:
+		#result = 'Wet'
+        GPIO.output(16,GPIO.HIGH)
+    return m
+
+    
 if __name__ == '__main__':
     main()
