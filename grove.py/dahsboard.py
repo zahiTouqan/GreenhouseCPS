@@ -9,6 +9,10 @@ import light
 import requests
 import RPi.GPIO as GPIO
 import time
+
+chat_id = "5790406939"
+bot_id = "6237670603:AAG7YRoBlpeyu9vNsEOJPQuvU1sGVvUoO9o"
+
 def create_thermometer(value, min_value, max_value,measurement):
     filled = int((value - min_value) / (max_value - min_value) * 100)
     empty = 100 - filled
