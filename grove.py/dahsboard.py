@@ -101,4 +101,4 @@ while True:
 	if not message is None:
 		url = f"https://api.telegram.org/bot{bot_id}/sendMessage?chat_id={chat_id}&text={message}"
 		print(requests.get(url).json())
-	time.sleep(5)
+	time.sleep(60)
