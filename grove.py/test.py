@@ -85,7 +85,7 @@ while True:
 	print('Light Intensity: {0}'.format(l))
 	
 	#Led Initial Response:
-	if MLed or TLed or LLed:
+	if MLed or TLed or HLed or LLed:
 		GPIO.output(16,GPIO.HIGH)
 
 	#Telegram Warning Message
