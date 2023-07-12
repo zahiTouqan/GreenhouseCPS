@@ -147,3 +147,6 @@ def main():
             url = f"https://api.telegram.org/bot{bot_id}/sendMessage?chat_id={chat_id}&text={message}"
             print(requests.get(url).json())
         time.sleep(60)
+
+if __name__ == "__main__":
+    main()
