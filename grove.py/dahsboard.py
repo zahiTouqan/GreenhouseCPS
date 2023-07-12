@@ -108,27 +108,12 @@ def main():
             GPIO.output(21, GPIO.HIGH)  # Turn motor off
         elif 450 <= m:
             moistureState = 'Wet'
-        if moistureState is not None:
-            if moistureState == 'Wet' or moistureState == 'Dry':
-                message = "Your Soil is Very {}: {:.2f}%\n".format(moistureState, per)
-                MLed = True
-                st.components.v1.html(f"<script>alert('Threshold exceeded for Moisture, your soil is very dry: {per}');</script>")
-		
-        print('Percentage of Moisture: {:.2f}%'.format(per))
-	
         #Temperature:
         humi, temp = dht.main()
         if temp < 16:
             tempState = 'Low'
         elif 26 < temp:
             tempState = 'High'
-        if tempState is not None:
-            if tempState == 'Low' or tempState == 'High':
-                message += "The Temperature is Very {}: {}C\n".format(tempState, temp)
-                TLed = True
-		
-        print('Temperature: {0}'.format(temp))
-	
         #Humidity
         if humi < 40:
             humiState = 'Low'
@@ -148,13 +133,6 @@ def main():
             lightState = 'Dark'
         elif 700 > l:
             lightState = 'Bright'
-        if lightState is not None:
-            if lightState == 'Dark' or lightState == 'Bright':
-                message += "The Light Intensity is Too {}: {:.2f}%".format(lightState, lightPer)
-                LLed = True
-		
-        print('Light Intensity: {0}'.format(l))
-	
         if lightPer < 50:
           color = "green"  # Green for lower values
         elif lightPer < 75:
@@ -168,9 +146,38 @@ def main():
         fig.update_traces(gauge={'bar': {'color': color}})
         gauge_container.plotly_chart(fig, use_container_width=True)
 
-        if per > 70:
-         st.components.v1.html(f"<script>alert('Threshold exceeded for value: {per}');</script>")
-        
+        if moistureState is not None:
+            if moistureState == 'Wet' or moistureState == 'Dry':
+                message = "Your Soil is Very {}: {:.2f}%\n".format(moistureState, per)
+                MLed = True
+                st.components.v1.html(
+                    f"<script>alert('Threshold exceeded for Moisture, your soil is very {moistureState} : {per}');</script>")
+
+        print('Percentage of Moisture: {:.2f}%'.format(per))
+        if lightState is not None:
+            if lightState == 'Dark' or lightState == 'Bright':
+                message += "The Light Intensity is Too {}: {:.2f}%".format(lightState, lightPer)
+                LLed = True
+                st.components.v1.html(
+                    f"<script>alert('Threshold exceeded for Moisture, your soil is very {lightState} : {lightPer}');</script>")
+
+        print('Light Intensity: {0}'.format(l))
+        if humiState is not None:
+            if humiState == 'Low' or humiState == 'High':
+                message += "The Humidity is Very {}: {}C\n".format(humiState, humi)
+                HLed = True
+                st.components.v1.html(
+                    f"<script>alert('Threshold exceeded for Moisture, your soil is very {humiState} : {humi}');</script>")
+
+        print('Humidity: {:.2f}'.format(humi))
+        if tempState is not None:
+            if tempState == 'Low' or tempState == 'High':
+                message += "The Temperature is Very {}: {}C\n".format(tempState, temp)
+                TLed = True
+                st.components.v1.html(
+                    f"<script>alert('Threshold exceeded for Moisture, your soil is very {tempState} : {temp}');</script>")
+
+        print('Temperature: {0}'.format(temp))
         #Led Initial Response:
         if MLed or TLed or HLed or LLed:
             GPIO.output(16,GPIO.HIGH)
