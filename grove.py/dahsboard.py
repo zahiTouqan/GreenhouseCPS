@@ -16,15 +16,9 @@ bot_id = "6237670603:AAG7YRoBlpeyu9vNsEOJPQuvU1sGVvUoO9o"
 GPIO.setup(16, GPIO.OUT)
 GPIO.setup(21, GPIO.OUT)
 
-def create_thermometer_widget(container, value, min_value, max_value, measurement):
+def create_thermometer_widget(container, value, min_value, max_value, measurement,color):
     # Create the empty placeholders for the thermometer widget
     filled = int((value - min_value) / (max_value - min_value) * 100)
-    if filled < 50:
-        color = "#00ff00"  # Green for lower values
-    elif filled < 75:
-        color = "#ffa500"  # Orange for values between 50 and 75
-    else:
-        color = "#ff0000"
         # Update the existing thermometer widget
     thermometer_style = f"""
         <style>
@@ -91,7 +85,10 @@ def main():
         humiState = None
         tempState = None
         lightState = None
-
+        lightColor = "green"
+        humidityColor= "green"
+        moistureColor= "green"
+        tempColor = "green"
         #Moisture:
         m = test()
         maxval = 950 #max value of moisture in water
@@ -106,8 +103,10 @@ def main():
             elif 100 <= m and m < 150:
                 time.sleep(2)
             GPIO.output(21, GPIO.HIGH)  # Turn motor off
+            moistureColor = "red"
         elif 450 <= m:
             moistureState = 'Wet'
+            moistureColor = "red"
         #Temperature:
         humi, temp = dht.main()
         if temp < 16:
@@ -119,12 +118,8 @@ def main():
             humiState = 'Low'
         elif 70 < humi:
             humiState = 'High'
-        if humiState is not None:
-            if humiState == 'Low' or humiState == 'High':
-                message += "The Humidity is Very {}: {}C\n".format(humiState, humi)
-                HLed = True
-		
-        print('Humidity: {:.2f}'.format(humi))
+        if tempState is not none:
+            tempColor = "red"
 	
         #Light:
         l = light.main()
@@ -133,17 +128,13 @@ def main():
             lightState = 'Dark'
         elif 700 > l:
             lightState = 'Bright'
-        if lightPer < 50:
-          color = "green"  # Green for lower values
-        elif lightPer < 75:
-          color = "orange"  # Orange for values between 50 and 75
-        else:
-          color = "red"
-        display_humidity(humi, humidity, color)
-        create_thermometer_widget(thermometer1_container, temp, 0, 100, "Temperature")
-        create_thermometer_widget(thermometer2_container, lightPer, 0, 100, "Light")
+        if lightState is not none:
+            lightColor = "red"
+        display_humidity(humi, humidity, humidityColor)
+        create_thermometer_widget(thermometer1_container, temp, 0, 100, "Temperature",tempColor)
+        create_thermometer_widget(thermometer2_container, lightPer, 0, 100, "Light",lightColor)
         fig.update_traces(value=per)
-        fig.update_traces(gauge={'bar': {'color': color}})
+        fig.update_traces(gauge={'bar': {'color': moistureColor}})
         gauge_container.plotly_chart(fig, use_container_width=True)
 
         if moistureState is not None:
