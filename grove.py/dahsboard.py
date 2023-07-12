@@ -159,7 +159,7 @@ def main():
                 message += "The Light Intensity is Too {}: {:.2f}%".format(lightState, lightPer)
                 LLed = True
                 st.components.v1.html(
-                    f"<script>alert('Threshold exceeded for Moisture, your soil is very {lightState} : {lightPer}');</script>")
+                    f"<script>alert('Threshold exceeded for Light, your soil is very {lightState} : {lightPer}');</script>")
 
         print('Light Intensity: {0}'.format(l))
         if humiState is not None:
@@ -167,7 +167,7 @@ def main():
                 message += "The Humidity is Very {}: {}C\n".format(humiState, humi)
                 HLed = True
                 st.components.v1.html(
-                    f"<script>alert('Threshold exceeded for Moisture, your soil is very {humiState} : {humi}');</script>")
+                    f"<script>alert('Threshold exceeded for Humidity, your soil is very {humiState} : {humi}');</script>")
 
         print('Humidity: {:.2f}'.format(humi))
         if tempState is not None:
@@ -175,7 +175,7 @@ def main():
                 message += "The Temperature is Very {}: {}C\n".format(tempState, temp)
                 TLed = True
                 st.components.v1.html(
-                    f"<script>alert('Threshold exceeded for Moisture, your soil is very {tempState} : {temp}');</script>")
+                    f"<script>alert('Threshold exceeded for Temperature, your soil is very {tempState} : {temp}');</script>")
 
         print('Temperature: {0}'.format(temp))
         #Led Initial Response:
