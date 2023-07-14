@@ -25,7 +25,7 @@ def create_thermometer_widget(container, value, min_value, max_value, measuremen
             .thermometer {{
                 width: 50px;
                 height: 400px;
-                background: linear-gradient(to bottom, #eee {100 - filled}%, {color} {100 - filled}%);
+                background: linear-gradient(to bottom, #eee {100 - filled:.2f}%, {color} {100 - filled:.2f}%);
                 border-radius: 10px;
                 display: flex;
                 flex-direction: column-reverse;
@@ -40,7 +40,7 @@ def create_thermometer_widget(container, value, min_value, max_value, measuremen
     """
     thermometer_html = f"""
         <div class="thermometer">
-            {measurement} {value}°
+            {measurement} {value:.2f}°
         </div>
     """
     container.markdown(thermometer_style + thermometer_html, unsafe_allow_html=True)
@@ -118,7 +118,7 @@ def main():
             humiState = 'Low'
         elif 70 < humi:
             humiState = 'High'
-        if tempState is not none:
+        if tempState is not None:
             tempColor = "red"
 	
         #Light:
@@ -128,7 +128,7 @@ def main():
             lightState = 'Dark'
         elif 700 > l:
             lightState = 'Bright'
-        if lightState is not none:
+        if lightState is not None:
             lightColor = "red"
         display_humidity(humi, humidity, humidityColor)
         create_thermometer_widget(thermometer1_container, temp, 0, 100, "Temperature",tempColor)
@@ -142,7 +142,7 @@ def main():
                 message = "Your Soil is Very {}: {:.2f}%\n".format(moistureState, per)
                 MLed = True
                 st.components.v1.html(
-                    f"<script>alert('Threshold exceeded for Moisture, your soil is very {moistureState} : {per}');</script>")
+                    f"<script>alert('Threshold exceeded for Moisture: {moistureState} : {per:.2f}');</script>")
 
         print('Percentage of Moisture: {:.2f}%'.format(per))
         if lightState is not None:
@@ -150,7 +150,7 @@ def main():
                 message += "The Light Intensity is Too {}: {:.2f}%".format(lightState, lightPer)
                 LLed = True
                 st.components.v1.html(
-                    f"<script>alert('Threshold exceeded for Light, your soil is very {lightState} : {lightPer}');</script>")
+                    f"<script>alert('Threshold exceeded for Light: {lightState} : {lightPer:.2f}');</script>")
 
         print('Light Intensity: {0}'.format(l))
         if humiState is not None:
@@ -158,7 +158,7 @@ def main():
                 message += "The Humidity is Very {}: {}C\n".format(humiState, humi)
                 HLed = True
                 st.components.v1.html(
-                    f"<script>alert('Threshold exceeded for Humidity, your soil is very {humiState} : {humi}');</script>")
+                    f"<script>alert('Threshold exceeded for Humidity: {humiState} : {humi}');</script>")
 
         print('Humidity: {:.2f}'.format(humi))
         if tempState is not None:
@@ -166,7 +166,7 @@ def main():
                 message += "The Temperature is Very {}: {}C\n".format(tempState, temp)
                 TLed = True
                 st.components.v1.html(
-                    f"<script>alert('Threshold exceeded for Temperature, your soil is very {tempState} : {temp}');</script>")
+                    f"<script>alert('Threshold exceeded for Temperature: {tempState} : {temp}');</script>")
 
         print('Temperature: {0}'.format(temp))
         #Led Initial Response:
