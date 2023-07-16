@@ -18,14 +18,14 @@ GPIO.setup(21, GPIO.OUT)
 
 def create_thermometer_widget(container, value, min_value, max_value, measurement,color):
     # Create the empty placeholders for the thermometer widget
-    filled = int((value - min_value) / (max_value - min_value) * 100)
+    filled = int((value  / max_value) * 100)
     x = "°" 
     if measurement == "Light":
       x = "%"
         # Update the existing thermometer widget
     thermometer_style = f"""
         <style>
-            .thermometer {{
+            .{measurement} {{
                 width: 50px;
                 height: 400px;
                 background: linear-gradient(to bottom, #eee {100 - filled:.2f}%, {color} {100 - filled:.2f}%);
@@ -42,7 +42,7 @@ def create_thermometer_widget(container, value, min_value, max_value, measuremen
         </style>
     """
     thermometer_html = f"""
-        <div class="thermometer">
+        <div class={measurement}>
             {measurement} {value:.2f}{x}
         </div>
     """
@@ -62,6 +62,7 @@ def main():
 
     humidity = st.empty()
     st.markdown(f"<h1 style='font-size: 28px; text-align: center;'>Humidity</h1>", unsafe_allow_html=True)
+    #st.markdown(f"""<style> p {background-image: url(‘/home/cch/Downloads/LocalRepo/GreenhouseCPS/grove.py/094ebaba58c0194445812ad1b4552f9a-1484388571’);}</style>""",unsafe_allow_html=True)
     # Define the column layout
     col1, col2, col3, col4, col5, col6 = st.columns([2, 1, 1, 3, 2, 2])
 
@@ -80,7 +81,7 @@ def main():
     fig.update_traces()
     while True:
         GPIO.output(16,GPIO.LOW)
-        Mled = False
+        MLed = False
         TLed = False
         HLed = False
         LLed = False
@@ -92,30 +93,33 @@ def main():
         humidityColor= "green"
         moistureColor= "green"
         tempColor = "green"
+        message = ""
+        
         #Moisture:
         m = test()
-        maxval = 950 #max value of moisture in water
+        maxval = 2500 #max value of moisture in water 0 - 1500: Dry, 1500 - 2000: Moist, 2000 - 2500: Wet 
         per = (m / maxval) * 100
         if 0 <= m and m < 150:
             moistureState = 'Dry'
             GPIO.output(21, GPIO.LOW)  # Turn motor on
-            if 0 <= m and m < 50:
+            if 0 <= m and m < 500:
                 time.sleep(6)
-            elif 50 <= m and m < 100:
+            elif 500 <= m and m < 1000:
                 time.sleep(4)
-            elif 100 <= m and m < 150:
+            elif 1000 <= m and m < 1500:
                 time.sleep(2)
             GPIO.output(21, GPIO.HIGH)  # Turn motor off
             moistureColor = "red"
-        elif 450 <= m:
+        elif 2000 <= m:
             moistureState = 'Wet'
             moistureColor = "red"
         #Temperature:
         humi, temp = dht.main()
         if temp < 16:
             tempState = 'Low'
-        elif 26 < temp:
+        elif 30 < temp:
             tempState = 'High'
+            
         #Humidity
         if humi < 40:
             humiState = 'Low'
@@ -131,12 +135,12 @@ def main():
         lightPer = (l / 1000) * 100
         if 0 <= l < 500:
             lightState = 'Dark'
-        elif 700 > l:
+        elif 750 < l:
             lightState = 'Bright'
         if lightState is not None:
             lightColor = "red"
         display_humidity(humi, humidity, humidityColor)
-        create_thermometer_widget(thermometer1_container, temp, 0, 100, "Temperature",tempColor)
+        create_thermometer_widget(thermometer1_container, temp, 0, 50, "Temperature",tempColor)
         create_thermometer_widget(thermometer2_container, lightPer, 0, 100, "Light",lightColor)
         fig.update_traces(value=per)
         fig.update_traces(gauge={'bar': {'color': moistureColor}})
@@ -144,7 +148,7 @@ def main():
 
         if moistureState is not None:
             if moistureState == 'Wet' or moistureState == 'Dry':
-                message = "Your Soil is Very {}: {:.2f}%\n".format(moistureState, per)
+                message += "Your Soil is Very {}: {:.2f}%\n".format(moistureState, per)
                 MLed = True
                 st.components.v1.html(
                     f"<script>alert('Threshold exceeded for Moisture: {moistureState} : {per:.2f}');</script>")
@@ -179,7 +183,7 @@ def main():
             GPIO.output(16,GPIO.HIGH)
 
         #Telegram Warning Message
-        if message is not None:
+        if message is not "":
             url = f"https://api.telegram.org/bot{bot_id}/sendMessage?chat_id={chat_id}&text={message}"
             print(requests.get(url).json())
         time.sleep(60)

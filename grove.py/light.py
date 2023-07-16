@@ -66,7 +66,8 @@ def main():
 
     #print('Detecting light...')
     #while True:
-    #print('Light value: {0}'.format(sensor.light))
+        #print('Light value: {0}'.format(sensor.light))
+        #time.sleep(1)
     return sensor.light
     #time.sleep(1)
 
