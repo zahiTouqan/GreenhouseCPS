@@ -19,6 +19,9 @@ GPIO.setup(21, GPIO.OUT)
 def create_thermometer_widget(container, value, min_value, max_value, measurement,color):
     # Create the empty placeholders for the thermometer widget
     filled = int((value - min_value) / (max_value - min_value) * 100)
+    x = "°" 
+    if measurement == "Light":
+      x = "%"
         # Update the existing thermometer widget
     thermometer_style = f"""
         <style>
@@ -40,7 +43,7 @@ def create_thermometer_widget(container, value, min_value, max_value, measuremen
     """
     thermometer_html = f"""
         <div class="thermometer">
-            {measurement} {value:.2f}°
+            {measurement} {value:.2f}{x}
         </div>
     """
     container.markdown(thermometer_style + thermometer_html, unsafe_allow_html=True)
@@ -118,6 +121,8 @@ def main():
             humiState = 'Low'
         elif 70 < humi:
             humiState = 'High'
+        if humiState is not None:
+            humidityColor = "red"
         if tempState is not None:
             tempColor = "red"
 	
