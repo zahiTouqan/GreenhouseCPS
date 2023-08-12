@@ -11,8 +11,8 @@ import RPi.GPIO as GPIO
 import time
 import streamlit as st
 
-chat_id = "5790406939"
-bot_id = "6237670603:AAG7YRoBlpeyu9vNsEOJPQuvU1sGVvUoO9o"
+chat_id = ""
+bot_id = ""
 GPIO.setup(16, GPIO.OUT)
 GPIO.setup(21, GPIO.OUT)
 
